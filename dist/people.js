@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Principal = exports.Teacher = exports.Student = exports.Person = void 0;
+exports.Employee = exports.Principal = exports.Teacher = exports.Student = exports.Person = void 0;
 class Person {
     constructor(firstName, lastName) {
         this.firstName = firstName;
@@ -36,4 +36,10 @@ class Principal extends Person {
     }
 }
 exports.Principal = Principal;
+class Employee extends Person {
+    get printAddress() {
+        return `${this.address.street}, ${this.address.city}, ${this.address.zipCode}`;
+    }
+}
+exports.Employee = Employee;
 //# sourceMappingURL=people.js.map

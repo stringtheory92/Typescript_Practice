@@ -19,4 +19,7 @@ function printNames(people) {
 }
 let shape = new shapes_1.Circle(10, "red");
 shape.render();
+let bob = new people_1.Employee("Bob", "Cobb");
+bob.address = { street: "Clark", city: "Kansas City", zipCode: 64111 };
+console.log(bob.printAddress);
 //# sourceMappingURL=index.js.map

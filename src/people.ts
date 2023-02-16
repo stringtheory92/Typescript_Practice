@@ -29,3 +29,20 @@ export class Principal extends Person {
     return "Principal " + super.fullName;
   }
 }
+
+interface Address {
+  street: string;
+  city: string;
+  zipCode: number;
+}
+export interface Employee {
+  name: string;
+  salary: number;
+  address: Address;
+}
+
+export class Employee extends Person implements Employee {
+  get printAddress() {
+    return `${this.address.street}, ${this.address.city}, ${this.address.zipCode}`;
+  }
+}

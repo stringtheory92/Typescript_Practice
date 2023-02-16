@@ -1,4 +1,4 @@
-import { Person, Principal, Student, Teacher } from "./people";
+import { Employee, Person, Principal, Student, Teacher } from "./people";
 import { Ride } from "./ride";
 import { Circle } from "./shapes";
 
@@ -22,3 +22,7 @@ function printNames(people: Person[]) {
 
 let shape = new Circle(10, "red");
 shape.render();
+
+let bob = new Employee("Bob", "Cobb");
+bob.address = { street: "Clark", city: "Kansas City", zipCode: 64111 };
+console.log(bob.printAddress);
