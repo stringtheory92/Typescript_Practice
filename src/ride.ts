@@ -1,4 +1,4 @@
-class Ride {
+export class Ride {
   private static _activeRides: number = 0;
 
   start() {
