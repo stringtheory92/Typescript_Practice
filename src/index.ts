@@ -92,7 +92,20 @@ class Store<T> {
   get objects() {
     return this._objects;
   }
+
+  // if T is Product
+  // keyof T => 'name' | 'price'
+  find(property: keyof T, value: unknown): T | undefined {
+    return this._objects.find((obj) => obj[property] === value);
+  }
 }
+
+let store = new Store<Item>();
+store.add({ name: "a", price: 1 });
+store.find("name", "a");
+store.find("price", 1);
+
+// Pass on the Generic
 class CompressibleStore<T> extends Store<T> {
   compress() {}
 }
@@ -101,11 +114,14 @@ let compressed = new CompressibleStore<Item>();
 compressed.add({ name: "basketball", price: 20 });
 console.log(compressed.objects);
 
-class SearchableStore<T extends { name: string }> extends Store<T> {
-  find(name: string): T | undefined {
-    return this._objects.find((obj) => obj.name === name);
-  }
-}
+//Restricting Generic
+// class SearchableStore<T extends { name: string }> extends Store<T> {
+//   override find(name: string): T | undefined {
+//     return this._objects.find((obj) => obj.name === name);
+//   }
+// }
+
+// Terminated Generic
 class ProductStore extends Store<Product> {
   filterByCategory(category: string): Product[] {
     if (category) return [];
@@ -113,6 +129,32 @@ class ProductStore extends Store<Product> {
   }
 }
 console.log(
-  new ProductStore().filterByCategory("category"),
-  new SearchableStore().find("name")
+  new ProductStore().filterByCategory("category")
+  //   new SearchableStore().find("name")
 );
+
+type ReadOnlyItem = {
+  readonly [Property in keyof Item]: Item[Property];
+};
+type ReadOnly<T> = {
+  readonly [Key in keyof T]: T[Key];
+};
+type Optional<T> = {
+  [Key in keyof T]?: T[Key] | undefined;
+};
+
+let optionalProduct: Optional<Item> = {
+  name: "x",
+  price: 5,
+};
+
+let product: ReadOnlyItem = {
+  name: "a",
+  price: 1,
+};
+
+let moreFlexibleProduct: ReadOnly<Item> = {
+  name: "b",
+  price: 10,
+};
+console.log(product, moreFlexibleProduct, optionalProduct);

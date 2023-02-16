@@ -64,18 +64,20 @@ class Store {
     get objects() {
         return this._objects;
     }
+    find(property, value) {
+        return this._objects.find((obj) => obj[property] === value);
+    }
 }
+let store = new Store();
+store.add({ name: "a", price: 1 });
+store.find("name", "a");
+store.find("price", 1);
 class CompressibleStore extends Store {
     compress() { }
 }
 let compressed = new CompressibleStore();
 compressed.add({ name: "basketball", price: 20 });
 console.log(compressed.objects);
-class SearchableStore extends Store {
-    find(name) {
-        return this._objects.find((obj) => obj.name === name);
-    }
-}
 class ProductStore extends Store {
     filterByCategory(category) {
         if (category)
@@ -83,5 +85,18 @@ class ProductStore extends Store {
         return [];
     }
 }
-console.log(new ProductStore().filterByCategory("category"), new SearchableStore().find("name"));
+console.log(new ProductStore().filterByCategory("category"));
+let optionalProduct = {
+    name: "x",
+    price: 5,
+};
+let product = {
+    name: "a",
+    price: 1,
+};
+let moreFlexibleProduct = {
+    name: "b",
+    price: 10,
+};
+console.log(product, moreFlexibleProduct, optionalProduct);
 //# sourceMappingURL=index.js.map
