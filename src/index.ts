@@ -26,3 +26,93 @@ shape.render();
 let bob = new Employee("Bob", "Cobb");
 bob.address = { street: "Clark", city: "Kansas City", zipCode: 64111 };
 console.log(bob.printAddress);
+
+class KeyValuePair<T, U> {
+  constructor(public key: T, public value: U) {}
+}
+
+let pair = new KeyValuePair("1", 0);
+
+class ArrayUtils {
+  static wrapInArray<T>(value: T) {
+    return [value];
+  }
+}
+console.log(pair, ArrayUtils.wrapInArray(1));
+
+interface Result<T> {
+  data: T | null;
+  error: string | null;
+}
+
+function fetch<T>(url: string): Result<T> {
+  if (url) return { data: null, error: null };
+  return { data: null, error: null };
+}
+
+interface User {
+  username: string;
+}
+
+interface Product {
+  title: string;
+}
+let productResult = fetch<Product>("url");
+let userResult = fetch<User>("url");
+console.log(productResult, userResult);
+// interface Man {
+//   name: string;
+// }
+
+class Man {
+  constructor(public name: string) {}
+}
+class Customer extends Man {}
+
+function echo<T extends Man>(value: T): T {
+  return value;
+}
+
+// console.log(echo({ name: "adam" }));
+console.log(echo(new Customer("adam")));
+
+//=====================
+//Passing on generics
+//=====================
+interface Item {
+  name: string;
+  price: number;
+}
+class Store<T> {
+  protected _objects: T[] = [];
+
+  add(obj: T): void {
+    this._objects.push(obj);
+  }
+  get objects() {
+    return this._objects;
+  }
+}
+class CompressibleStore<T> extends Store<T> {
+  compress() {}
+}
+let compressed = new CompressibleStore<Item>();
+
+compressed.add({ name: "basketball", price: 20 });
+console.log(compressed.objects);
+
+class SearchableStore<T extends { name: string }> extends Store<T> {
+  find(name: string): T | undefined {
+    return this._objects.find((obj) => obj.name === name);
+  }
+}
+class ProductStore extends Store<Product> {
+  filterByCategory(category: string): Product[] {
+    if (category) return [];
+    return [];
+  }
+}
+console.log(
+  new ProductStore().filterByCategory("category"),
+  new SearchableStore().find("name")
+);
