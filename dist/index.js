@@ -1,4 +1,10 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const people_1 = require("./people");
 const ride_1 = require("./ride");
@@ -99,4 +105,92 @@ let moreFlexibleProduct = {
     price: 10,
 };
 console.log(product, moreFlexibleProduct, optionalProduct);
+function Component(options) {
+    return (constructor) => {
+        console.log("Component decorator called");
+        constructor.prototype.options = options;
+        constructor.prototype.uniqueId = Date.now();
+        constructor.prototype.insertInDOM = () => {
+            console.log("Inserting the component in the DOM");
+        };
+    };
+}
+function Pipe(constructor) {
+    console.log("Pipe decorator call");
+    constructor.prototype.pipe = true;
+}
+let ProfileComponent = class ProfileComponent {
+};
+ProfileComponent = __decorate([
+    Component({ selector: "#my-profile" }),
+    Pipe
+], ProfileComponent);
+function Log(target, methodName, descriptor) {
+    const original = descriptor.value;
+    if (target && methodName) {
+        descriptor.value = function (...args) {
+            console.log("Before");
+            original.call(this, ...args);
+            console.log("After");
+        };
+    }
+}
+class Guy {
+    say(message) {
+        console.log("Guy says " + message);
+    }
+}
+__decorate([
+    Log
+], Guy.prototype, "say", null);
+let guy = new Guy();
+guy.say("Hello");
+function Capitalize(target, methodName, descriptor) {
+    const original = descriptor.get;
+    descriptor.get = function () {
+        const result = original.call(this);
+        return typeof result === "string" ? result.toUpperCase() : result;
+    };
+}
+class Gal {
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+}
+__decorate([
+    Capitalize
+], Gal.prototype, "fullName", null);
+let gal = new Gal("Wendy", "Smith");
+console.log(gal.fullName);
+function MinLength(length) {
+    return (target, propertyName) => {
+        console.log("target: ", target, "propertyName: ", propertyName);
+        let value;
+        const descriptor = {
+            get() {
+                return value;
+            },
+            set(newValue) {
+                if (newValue.length < length)
+                    throw new Error(`${propertyName} should be at least ${length} characters long`);
+                value = newValue;
+            },
+        };
+        Object.defineProperty(target, propertyName, descriptor);
+    };
+}
+class Operator {
+    constructor(password) {
+        this.password = password;
+    }
+}
+__decorate([
+    MinLength(4)
+], Operator.prototype, "password", void 0);
+let operator = new Operator("123");
+console.log(operator.password);
 //# sourceMappingURL=index.js.map
